@@ -148,9 +148,21 @@ function ocr(query, completion) {
         return;
     }
 
+    // 将 $data 对象转为 base64 字符串
+    var base64Str = imageData.toBase64();
+    if (!base64Str) {
+        completion({
+            error: {
+                type: 'param',
+                message: '图片数据转换失败'
+            }
+        });
+        return;
+    }
+
     // 构建 data URL
-    var mimeType = detectMimeType(imageData);
-    var dataUrl = 'data:' + mimeType + ';base64,' + imageData;
+    var mimeType = detectMimeType(base64Str);
+    var dataUrl = 'data:' + mimeType + ';base64,' + base64Str;
 
     // 构建请求
     var baseUrl = API_ENDPOINTS[region] || API_ENDPOINTS.cn;
