@@ -152,7 +152,10 @@ function tts(query, completion) {
     // 读取用户配置
     var apiKey = $option.apiKey;
     var region = $option.region || 'cn';
-    var preferredModel = $option.model || 'qwen3-tts-flash';
+    var modelOption = $option.model || 'qwen3-tts-instruct-flash';
+    var preferredModel = modelOption === 'custom'
+        ? ($option.customModel || '').trim()
+        : modelOption;
     var voice = $option.voice || 'Ethan';
     var languageType = getLanguageType(query.lang, $option.languageType);
     var instructions = ($option.instructions || '').trim();
@@ -170,8 +173,19 @@ function tts(query, completion) {
         return;
     }
 
-    // 智能模型选择
-    var model = resolveModel(preferredModel, voice);
+    // 校验自定义模型
+    if (modelOption === 'custom' && !preferredModel) {
+        completion({
+            error: {
+                type: 'param',
+                message: '已选择「自定义模型」但未填写模型名称，请在插件配置中填入模型名'
+            }
+        });
+        return;
+    }
+
+    // 智能模型选择 (自定义模型跳过兼容性检查，直接使用)
+    var model = modelOption === 'custom' ? preferredModel : resolveModel(preferredModel, voice);
 
     // instructions 仅在 instruct 模型下生效
     if (model !== 'qwen3-tts-instruct-flash') {
@@ -368,7 +382,10 @@ function pluginValidate(completion) {
     }
 
     var region = $option.region || 'cn';
-    var model = $option.model || 'qwen3-tts-flash';
+    var modelOption = $option.model || 'qwen3-tts-instruct-flash';
+    var model = modelOption === 'custom'
+        ? ($option.customModel || '').trim() || 'qwen3-tts-instruct-flash'
+        : modelOption;
     var baseUrl = API_ENDPOINTS[region] || API_ENDPOINTS.cn;
     var url = baseUrl + API_PATH;
 
