@@ -1,0 +1,164 @@
+{
+    "identifier": "com.qwen3.tts.bob.plugin",
+    "version": "2.0.0",
+    "category": "tts",
+    "name": "Qwen3 TTS",
+    "summary": "基于阿里云 Qwen3-TTS 系列模型的高质量语音合成，支持指令控制语速/情感/音调",
+    "icon": "microphone",
+    "author": "slowlyC",
+    "homepage": "https://github.com/slowlyC/qwen3-tts-plugin",
+    "appcast": "https://raw.githubusercontent.com/slowlyC/qwen3-tts-plugin/main/appcast.json",
+    "minBobVersion": "1.6.0",
+    "options": [
+        {
+            "identifier": "apiKey",
+            "type": "text",
+            "title": "API Key",
+            "desc": "必填。DashScope API Key，可在 https://dashscope.console.aliyun.com/ 申请",
+            "textConfig": {
+                "type": "secure",
+                "height": 40,
+                "placeholderText": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            }
+        },
+        {
+            "identifier": "region",
+            "type": "menu",
+            "title": "API 地域",
+            "defaultValue": "cn",
+            "desc": "国内用户选北京，海外用户选新加坡",
+            "menuValues": [
+                { "title": "北京 (国内)", "value": "cn" },
+                { "title": "新加坡 (国际)", "value": "intl" }
+            ]
+        },
+        {
+            "identifier": "model",
+            "type": "menu",
+            "title": "模型",
+            "defaultValue": "qwen3-tts-flash",
+            "desc": "Instruct-Flash 支持指令控制语速/情感，Flash 速度最快，旧版 TTS 兼容老音色",
+            "menuValues": [
+                { "title": "Qwen3-TTS-Instruct-Flash (指令控制)", "value": "qwen3-tts-instruct-flash" },
+                { "title": "Qwen3-TTS-Flash (推荐)", "value": "qwen3-tts-flash" },
+                { "title": "Qwen-TTS (旧版)", "value": "qwen-tts" }
+            ]
+        },
+        {
+            "identifier": "voice",
+            "type": "menu",
+            "title": "语音角色",
+            "defaultValue": "Ethan",
+            "desc": "48 种官方音色。标注 [I] 的支持 Instruct 指令控制，标注 [F] 的仅支持 Flash 模型",
+            "menuValues": [
+                { "title": "── 精选推荐 ──", "value": "_sep_1" },
+                { "title": "[I] Ethan/晨煦 (男·阳光温暖)", "value": "Ethan" },
+                { "title": "[I] Cherry/芊悦 (女·阳光亲切)", "value": "Cherry" },
+                { "title": "[I] Serena/苏瑶 (女·温柔舒缓)", "value": "Serena" },
+                { "title": "[I] Chelsie/千雪 (女·二次元女友)", "value": "Chelsie" },
+                { "title": "── 普通话·女声 ──", "value": "_sep_2" },
+                { "title": "[I] Maia/四月 (知性温柔)", "value": "Maia" },
+                { "title": "[I] Vivian/十三 (拽拽的可爱)", "value": "Vivian" },
+                { "title": "[I] Momo/茉兔 (撒娇搞怪)", "value": "Momo" },
+                { "title": "[I] Nini/邻家妹妹 (甜美黏人)", "value": "Nini" },
+                { "title": "[I] Stella/少女阿月 (中二正义)", "value": "Stella" },
+                { "title": "[I] Seren/小婉 (哄睡舒缓)", "value": "Seren" },
+                { "title": "[I] Mia/乖小妹 (温顺乖巧)", "value": "Mia" },
+                { "title": "[I] Bella/萌宝 (可爱萝莉)", "value": "Bella" },
+                { "title": "[I] Bunny/萌小姬 (萌属性爆棚)", "value": "Bunny" },
+                { "title": "[I] Bellona/燕铮莺 (金戈铁马·活力)", "value": "Bellona" },
+                { "title": "[I] Elias/墨讲师 (严谨叙事)", "value": "Elias" },
+                { "title": "[F] Katerina/卡捷琳娜 (御姐·韵律感)", "value": "Katerina" },
+                { "title": "[F] Sohee/素熙 (韩风·温柔开朗)", "value": "Sohee" },
+                { "title": "[F] Ono Anna/小野杏 (鬼灵精怪)", "value": "Ono Anna" },
+                { "title": "── 普通话·男声 ──", "value": "_sep_3" },
+                { "title": "[I] Moon/月白 (率性帅气)", "value": "Moon" },
+                { "title": "[I] Kai/凯 (舒适磁性)", "value": "Kai" },
+                { "title": "[I] Nofish/不吃鱼 (设计师风格)", "value": "Nofish" },
+                { "title": "[I] Neil/阿闻 (专业新闻主播)", "value": "Neil" },
+                { "title": "[I] Eldric Sage/沧明子 (沉稳睿智老者)", "value": "Eldric Sage" },
+                { "title": "[I] Vincent/田叔 (沙哑烟嗓·故事感)", "value": "Vincent" },
+                { "title": "[I] Arthur/徐大爷 (质朴·奇闻异事)", "value": "Arthur" },
+                { "title": "[I] Mochi/沙小弥 (早慧小大人)", "value": "Mochi" },
+                { "title": "[I] Pip/顽屁小孩 (调皮捣蛋)", "value": "Pip" },
+                { "title": "[F] Ryan/甜茶 (节奏拉满·戏感炸裂)", "value": "Ryan" },
+                { "title": "[F] Aiden/艾登 (美语大男孩)", "value": "Aiden" },
+                { "title": "[F] Andre/安德雷 (沉稳磁性)", "value": "Andre" },
+                { "title": "[F] Lenn/莱恩 (德国青年·理性)", "value": "Lenn" },
+                { "title": "[F] Alek/阿列克 (冷酷与暖男)", "value": "Alek" },
+                { "title": "── 外语特色 ──", "value": "_sep_4" },
+                { "title": "[F] Jennifer/詹妮弗 (美语女声·电影感)", "value": "Jennifer" },
+                { "title": "[F] Emilien/埃米尔安 (法语大哥哥)", "value": "Emilien" },
+                { "title": "[F] Bodega/博德加 (西班牙大叔)", "value": "Bodega" },
+                { "title": "[F] Sonrisa/索尼莎 (拉美大姐)", "value": "Sonrisa" },
+                { "title": "[F] Dolce/多尔切 (意大利大叔)", "value": "Dolce" },
+                { "title": "[F] Radio Gol/拉迪奥 (激情足球解说)", "value": "Radio Gol" },
+                { "title": "── 方言/粤语 ──", "value": "_sep_5" },
+                { "title": "[F] Dylan/北京-晓东 (北京胡同少年)", "value": "Dylan" },
+                { "title": "[F] Jada/上海-阿珍 (沪上阿姐)", "value": "Jada" },
+                { "title": "[F] Sunny/四川-晴儿 (甜美川妹子)", "value": "Sunny" },
+                { "title": "[F] Eric/四川-程川 (跳脱市井成都男)", "value": "Eric" },
+                { "title": "[F] Marcus/陕西-秦川 (老陕味道)", "value": "Marcus" },
+                { "title": "[F] Li/南京-老李 (瑜伽老师)", "value": "Li" },
+                { "title": "[F] Peter/天津-李彼得 (相声捧哏)", "value": "Peter" },
+                { "title": "[F] Roy/闽南-阿杰 (台湾哥仔)", "value": "Roy" },
+                { "title": "[F] Kiki/粤语-阿清 (甜美港妹)", "value": "Kiki" },
+                { "title": "[F] Rocky/粤语-阿强 (幽默陪聊)", "value": "Rocky" }
+            ]
+        },
+        {
+            "identifier": "languageType",
+            "type": "menu",
+            "title": "合成语种",
+            "defaultValue": "Auto",
+            "desc": "指定语种可显著提升合成质量。Auto 自动检测适合多语种混合文本",
+            "menuValues": [
+                { "title": "自动检测", "value": "Auto" },
+                { "title": "中文", "value": "Chinese" },
+                { "title": "英语", "value": "English" },
+                { "title": "日语", "value": "Japanese" },
+                { "title": "韩语", "value": "Korean" },
+                { "title": "法语", "value": "French" },
+                { "title": "德语", "value": "German" },
+                { "title": "西班牙语", "value": "Spanish" },
+                { "title": "意大利语", "value": "Italian" },
+                { "title": "葡萄牙语", "value": "Portuguese" },
+                { "title": "俄语", "value": "Russian" }
+            ]
+        },
+        {
+            "identifier": "instructions",
+            "type": "text",
+            "title": "语音指令 (Instruct 模型专属)",
+            "defaultValue": "",
+            "desc": "用自然语言描述语音风格，如「语速较快，带有上扬语调，适合介绍时尚产品」。仅 Instruct-Flash 模型生效",
+            "textConfig": {
+                "type": "visible",
+                "height": 80,
+                "placeholderText": "例: 语速偏慢，音调温柔甜美，语气治愈温暖"
+            }
+        },
+        {
+            "identifier": "optimizeInstructions",
+            "type": "menu",
+            "title": "指令语义增强",
+            "defaultValue": "false",
+            "desc": "开启后系统会对语音指令进行语义增强重写，可能提升效果。仅 Instruct-Flash 模型生效",
+            "menuValues": [
+                { "title": "关闭", "value": "false" },
+                { "title": "开启", "value": "true" }
+            ]
+        },
+        {
+            "identifier": "timeout",
+            "type": "text",
+            "title": "超时时间 (秒)",
+            "defaultValue": "60",
+            "desc": "语音合成超时时间，范围 30-300 秒",
+            "textConfig": {
+                "type": "visible",
+                "placeholderText": "60"
+            }
+        }
+    ]
+}
